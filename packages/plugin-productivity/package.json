@@ -18,6 +18,7 @@
     "dist"
   ],
   "dependencies": {
+    "@coinbase/coinbase-sdk": "^0.17.0",
     "@elizaos/core": "workspace:*",
     "tsup": "8.3.5",
     "zod": "^3.22.4"

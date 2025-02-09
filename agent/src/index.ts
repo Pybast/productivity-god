@@ -983,11 +983,11 @@ export async function createAgent(
         ? elizaCodeinPlugin
         : null,
       bootstrapPlugin,
-      getSecret(character, "CDP_API_KEY_NAME") &&
-      getSecret(character, "CDP_API_KEY_PRIVATE_KEY") &&
-      getSecret(character, "CDP_AGENT_KIT_NETWORK")
-        ? agentKitPlugin
-        : null,
+      // getSecret(character, "CDP_API_KEY_NAME") &&
+      // getSecret(character, "CDP_API_KEY_PRIVATE_KEY") &&
+      // getSecret(character, "CDP_AGENT_KIT_NETWORK")
+      //   ? agentKitPlugin
+      //   : null,
       getSecret(character, "DEXSCREENER_API_KEY") ? dexScreenerPlugin : null,
       getSecret(character, "FOOTBALL_API_KEY") ? footballPlugin : null,
       getSecret(character, "CONFLUX_CORE_PRIVATE_KEY") ? confluxPlugin : null,
@@ -1052,15 +1052,15 @@ export async function createAgent(
         ? imageGenerationPlugin
         : null,
       getSecret(character, "FAL_API_KEY") ? ThreeDGenerationPlugin : null,
-      ...(getSecret(character, "COINBASE_API_KEY") &&
-      getSecret(character, "COINBASE_PRIVATE_KEY")
-        ? [
-            coinbaseMassPaymentsPlugin,
-            tradePlugin,
-            tokenContractPlugin,
-            advancedTradePlugin,
-          ]
-        : []),
+      // ...(getSecret(character, "COINBASE_API_KEY") &&
+      // getSecret(character, "COINBASE_PRIVATE_KEY")
+      //   ? [
+      //       coinbaseMassPaymentsPlugin,
+      //       tradePlugin,
+      //       tokenContractPlugin,
+      //       advancedTradePlugin,
+      //     ]
+      //   : []),
       ...(teeMode !== TEEMode.OFF && walletSecretSalt ? [teePlugin] : []),
       teeMode !== TEEMode.OFF &&
       walletSecretSalt &&
