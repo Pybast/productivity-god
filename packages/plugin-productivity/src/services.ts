@@ -2,6 +2,8 @@ import { Coinbase, Wallet } from "@coinbase/coinbase-sdk";
 import { IAgentRuntime } from "@elizaos/core";
 
 export async function slashUser(runtime: IAgentRuntime, user: string) {
+  console.log("### Slashing user ###");
+
   Coinbase.configure({
     privateKey: process.env.COINBASE_PRIVATE_KEY,
     apiKeyName: process.env.COINBASE_API_KEY,
@@ -11,6 +13,8 @@ export async function slashUser(runtime: IAgentRuntime, user: string) {
     networkId: Coinbase.networks.BaseSepolia,
     seed: process.env.COINBASE_GENERATED_WALLET_HEX_SEED,
   });
+
+  console.log(`Coinbase SDK wallet: ${wallet.getDefaultAddress()}`);
 
   const abi = [
     {
@@ -27,7 +31,7 @@ export async function slashUser(runtime: IAgentRuntime, user: string) {
 
   const transferArgs = {
     to: user,
-    value: 1n,
+    value: "1",
   };
 
   const contractInvocation = await wallet.invokeContract({
@@ -38,4 +42,6 @@ export async function slashUser(runtime: IAgentRuntime, user: string) {
   });
 
   await contractInvocation.wait();
+
+  console.log(`transaction sent ${contractInvocation.getTransactionHash()}`);
 }

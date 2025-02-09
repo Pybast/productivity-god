@@ -8,7 +8,7 @@ import {
   Memory,
   State,
 } from "@elizaos/core";
-import { getClient, slashUser, walletProvider } from "../services";
+import { slashUser } from "../services";
 
 export const goalFailedAction: Action = {
   name: "PRODUCTIVITY_CURRENT_GOAL_FAILED",
