@@ -439,6 +439,9 @@ importers:
       '@elizaos/plugin-primus':
         specifier: workspace:*
         version: link:../packages/plugin-primus
+      '@elizaos/plugin-productivity':
+        specifier: workspace:*
+        version: link:../packages/plugin-productivity
       '@elizaos/plugin-pyth-data':
         specifier: workspace:*
         version: link:../packages/plugin-pyth-data
