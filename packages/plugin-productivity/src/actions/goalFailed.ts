@@ -53,7 +53,7 @@ export const goalFailedAction: Action = {
     const user = "0x1e236400c653d9901ddcbc9cefbad96b80f91fa6";
 
     // TODO slash user on-chain
-    await slashUser(runtime, user);
+    const tx = await slashUser(runtime, user, slashingPercentage);
 
     try {
       // TODO: Apply slashing mechanism or penalties
@@ -61,7 +61,7 @@ export const goalFailedAction: Action = {
 
       if (callback) {
         callback({
-          text: `You failed to complete your goal. Your productivity rewards have been slashed by ${slashingPercentage}%. Learn from this—set a new goal and execute.`,
+          text: `You failed to complete your goal. Your productivity rewards have been slashed by ${slashingPercentage}%. Learn from this—set a new goal and execute.\nHere is the slashing transaction: ${tx}`,
           content: {
             // goal: failedGoal,
             // deadline: deadline,

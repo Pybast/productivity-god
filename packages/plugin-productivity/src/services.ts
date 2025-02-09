@@ -1,7 +1,11 @@
 import { Coinbase, Wallet } from "@coinbase/coinbase-sdk";
 import { IAgentRuntime } from "@elizaos/core";
 
-export async function slashUser(runtime: IAgentRuntime, user: string) {
+export async function slashUser(
+  runtime: IAgentRuntime,
+  user: string,
+  slashingPercentage: number
+) {
   console.log("### Slashing user ###");
 
   Coinbase.configure({
@@ -10,7 +14,7 @@ export async function slashUser(runtime: IAgentRuntime, user: string) {
   });
 
   const wallet = await Wallet.createWithSeed({
-    networkId: Coinbase.networks.BaseSepolia,
+    networkId: Coinbase.networks.BaseMainnet,
     seed: process.env.COINBASE_GENERATED_WALLET_HEX_SEED,
   });
 
@@ -18,25 +22,25 @@ export async function slashUser(runtime: IAgentRuntime, user: string) {
 
   const abi = [
     {
-      name: "transfer",
       type: "function",
+      name: "slashUser",
       inputs: [
-        { name: "to", type: "address" },
-        { name: "value", type: "uint256" },
+        { name: "_user", type: "address", internalType: "address" },
+        { name: "_amount", type: "uint256", internalType: "uint256" },
       ],
-      outputs: [{ name: "", type: "bool" }],
+      outputs: [],
       stateMutability: "nonpayable",
     },
   ];
 
   const transferArgs = {
-    to: user,
-    value: "1",
+    _user: user,
+    _amount: ((slashingPercentage * 10e18) / 100).toString(),
   };
 
   const contractInvocation = await wallet.invokeContract({
-    contractAddress: "0x036cbd53842c5426634e7929541ec2318f3dcf7e", // sepolia base USDC
-    method: "transfer",
+    contractAddress: "0x58944BCE9ccbd9C512c61CAab35fD4C892793bB1", // sepolia base USDC
+    method: "slashUser",
     args: transferArgs,
     abi,
   });
@@ -44,4 +48,6 @@ export async function slashUser(runtime: IAgentRuntime, user: string) {
   await contractInvocation.wait();
 
   console.log(`transaction sent ${contractInvocation.getTransactionHash()}`);
+
+  return contractInvocation.getTransactionHash();
 }
