@@ -11,8 +11,8 @@ export const productivityGodPlugin: Plugin = {
   actions: [
     setGoalAction,
     goalFailedAction,
-    goalSuccessAction,
-    getValueAtStakeAction,
+    // goalSuccessAction,
+    // getValueAtStakeAction,
   ],
   evaluators: [],
   providers: [],
