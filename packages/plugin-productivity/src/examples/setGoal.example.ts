@@ -26,7 +26,7 @@ export const setGoalExamples: ActionExample[][] = [
     {
       user: "{{user1}}",
       content: {
-        text: "I want to create a goal for today",
+        text: "I want to create a new goal",
       },
     },
     // {

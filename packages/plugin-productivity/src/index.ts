@@ -1,13 +1,19 @@
 import { Plugin } from "@elizaos/core";
 import { setGoalAction } from "./actions/setGoal";
-
-export * as actions from "./actions";
+import { goalFailedAction } from "./actions/goalFailed";
+import { goalSuccessAction } from "./actions/goalSuccess";
+import { getValueAtStakeAction } from "./actions/getValueAtStake";
 
 export const productivityGodPlugin: Plugin = {
   name: "productivity-god",
   description:
     "Productivity plugin for Eliza allowing tracking of user's goals and slashing of DeFi rewards in case of failure.",
-  actions: [setGoalAction],
+  actions: [
+    setGoalAction,
+    goalFailedAction,
+    goalSuccessAction,
+    getValueAtStakeAction,
+  ],
   evaluators: [],
   providers: [],
 };
