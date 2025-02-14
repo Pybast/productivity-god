@@ -3,6 +3,7 @@ import { setGoalAction } from "./actions/setGoal";
 import { goalFailedAction } from "./actions/goalFailed";
 import { goalSuccessAction } from "./actions/goalSuccess";
 import { getValueAtStakeAction } from "./actions/getValueAtStake";
+import { productivityUserProvider } from "./providers/user.provider";
 
 export const productivityGodPlugin: Plugin = {
   name: "productivity-god",
@@ -15,6 +16,6 @@ export const productivityGodPlugin: Plugin = {
     // getValueAtStakeAction,
   ],
   evaluators: [],
-  providers: [],
+  providers: [productivityUserProvider],
 };
 export default productivityGodPlugin;

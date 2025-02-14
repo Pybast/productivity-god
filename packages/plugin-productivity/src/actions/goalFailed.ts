@@ -1,4 +1,4 @@
-import { composeContext, elizaLogger } from "@elizaos/core";
+import { composeContext, elizaLogger, ModelClass } from "@elizaos/core";
 import { generateMessageResponse } from "@elizaos/core";
 import {
   Action,
@@ -9,6 +9,10 @@ import {
   State,
 } from "@elizaos/core";
 import { slashUser } from "../services";
+import { findGoalTemplate } from "../templates";
+import { db } from "../db";
+import { tasksTable, usersTable } from "../db/schema";
+import { eq } from "drizzle-orm";
 
 export const goalFailedAction: Action = {
   name: "PRODUCTIVITY_CURRENT_GOAL_FAILED",
@@ -46,11 +50,50 @@ export const goalFailedAction: Action = {
 
     elizaLogger.warn(`User failed to complete goal`);
 
+    // state -> context
+    const goalContext = composeContext({
+      state,
+      template: findGoalTemplate,
+    });
+
+    // context -> content
+    const content = await generateMessageResponse({
+      runtime,
+      context: goalContext,
+      modelClass: ModelClass.SMALL,
+    });
+
+    const goalId = content?.id;
+
+    if (goalId === undefined || parseInt(goalId as string) === undefined)
+      return;
+
+    const _goal = await db
+      .select()
+      .from(tasksTable)
+      .where(eq(tasksTable.id, parseInt(goalId as string)))
+      .limit(1);
+
+    if (!_goal || _goal?.length === 0) return;
+
+    await db
+      .update(tasksTable)
+      .set({ status: "done" })
+      .where(eq(tasksTable.id, parseInt(goalId as string)));
+
     // TODO define slashing %
     const slashingPercentage = 1;
 
+    const _user = await db
+      .select()
+      .from(usersTable)
+      .where(eq(usersTable.telegram, state.senderName.toLowerCase()))
+      .limit(1);
+
+    if (!_user || _user?.length === 0) return;
+
     // TODO extract from agent
-    const user = "0x1e236400c653d9901ddcbc9cefbad96b80f91fa6";
+    const user = _user[0].address;
 
     // TODO slash user on-chain
     const tx = await slashUser(runtime, user, slashingPercentage);

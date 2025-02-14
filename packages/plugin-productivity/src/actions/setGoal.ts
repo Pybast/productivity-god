@@ -11,6 +11,9 @@ import {
 } from "@elizaos/core";
 import { getNewGoalTemplate } from "../templates";
 import { setGoalExamples } from "../examples/setGoal.example";
+import { db } from "../db";
+import { tasksTable, usersTable } from "../db/schema";
+import { eq } from "drizzle-orm";
 
 export const setGoalAction: Action = {
   name: "PRODUCTIVITY_SET_CURRENT_GOAL",
@@ -79,6 +82,21 @@ export const setGoalAction: Action = {
 
     // Fetch weather & respond
     try {
+      const _user = await db
+        .select()
+        .from(usersTable)
+        .where(eq(usersTable.telegram, state.senderName.toLowerCase()))
+        .limit(1);
+
+      if (!_user || _user?.length === 0) return;
+
+      await db.insert(tasksTable).values({
+        userId: _user[0].id,
+        description: content.goal as string,
+        status: "pending",
+        deadline: content.deadline as number,
+      });
+
       // TODO set goal in database
       elizaLogger.success(
         `Successfully set goal in database for ${content.goal}, ${content.deadline}`

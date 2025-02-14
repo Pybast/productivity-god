@@ -20,6 +20,9 @@
   "dependencies": {
     "@coinbase/coinbase-sdk": "^0.17.0",
     "@elizaos/core": "workspace:*",
+    "dotenv": "^16.4.7",
+    "drizzle-orm": "^0.39.3",
+    "pg": "8.13.1",
     "tsup": "8.3.5",
     "zod": "^3.22.4"
   },
@@ -32,6 +35,9 @@
     "whatwg-url": "7.1.0"
   },
   "devDependencies": {
-    "@types/node": "^20.0.0"
+    "@types/node": "^20.0.0",
+    "@types/pg": "8.11.10",
+    "drizzle-kit": "^0.30.4",
+    "tsx": "^4.19.2"
   }
 }
